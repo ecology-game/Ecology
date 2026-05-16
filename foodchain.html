@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>السلسلة الغذائية</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(to bottom,#dfffe0,#f4fff4);
+text-align:center;
+overflow-x:hidden;
+}
+
+/* العنوان */
+
+h1{
+color:#2e7d32;
+font-size:45px;
+margin-top:20px;
+}
+
+/* الأرض */
+
+#land{
+
+width:90%;
+max-width:1100px;
+height:500px;
+
+margin:30px auto;
+
+background:linear-gradient(to top,#8bc34a,#c5e1a5);
+
+border-radius:25px;
+
+position:relative;
+
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+
+}
+
+/* الأزرار */
+
+button{
+
+padding:15px 20px;
+margin:10px;
+
+border:none;
+
+border-radius:15px;
+
+background:#2e7d32;
+
+color:white;
+
+font-size:20px;
+
+cursor:pointer;
+
+transition:0.2s;
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+background:#1b5e20;
+
+}
+
+/* الرسالة */
+
+#message{
+
+font-size:30px;
+
+font-weight:bold;
+
+margin-top:15px;
+
+}
+
+/* الكائنات */
+
+.grass,
+.grasshopper,
+.frog,
+.snake,
+.hawk{
+
+position:absolute;
+
+background-size:contain;
+
+background-repeat:no-repeat;
+
+background-position:center;
+
+bottom:10px;
+
+}
+
+
+
+/* جرادة */
+
+.grasshopper{
+
+width:100px;
+height:100px;
+
+background-image:url('grasshopper.png');
+
+left:250px;
+
+}
+
+/* عشب */
+
+.grass{
+
+width:100px;
+height:100px;
+
+background-image:url('grass.png');
+
+left:50px;
+
+}
+/* ضفدع */
+
+.frog{
+
+width:120px;
+height:120px;
+
+background-image:url('frog.png');
+
+left:450px;
+
+}
+
+/* أفعى */
+
+.snake{
+
+width:180px;
+height:120px;
+
+background-image:url('snake.png');
+
+left:650px;
+
+}
+
+/* صقر */
+
+.hawk{
+
+width:180px;
+height:180px;
+
+background-image:url('hawk.png');
+
+left:850px;
+
+bottom:180px;
+
+}
+
+/* صورة النهاية */
+
+#final-image img{
+
+width:90%;
+max-width:900px;
+
+margin-top:20px;
+
+border-radius:20px;
+
+box-shadow:0 10px 20px rgba(0,0,0,0.3);
+
+}
+
+/* زر الرجوع */
+
+#back-btn{
+
+display:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🌿 السلسلة الغذائية</h1>
+
+<h2>
+رتب السلسلة الغذائية بشكل صحيح
+</h2>
+
+<div>
+
+    <button onclick="choose('snake')">
+🐍 أفعى
+</button>
+
+<button onclick="choose('grasshopper')">
+🦗 جرادة
+</button>
+
+<button onclick="choose('frog')">
+🐸 ضفدع
+</button>
+
+
+<button onclick="choose('grass')">
+🌱 عشب
+</button>
+
+<button onclick="choose('hawk')">
+🦅 صقر
+</button>
+
+</div>
+
+<div id="land"></div>
+
+<p id="message"></p>
+
+<div id="final-image"></div>
+
+<br><br>
+
+<button id="back-btn"
+onclick="goBack()">
+
+⬅️ الرجوع للرئيسية
+
+</button>
+
+<script>
+
+const land=document.getElementById("land");
+
+let stage=0;
+
+/* الاختيار */
+
+function choose(type){
+
+if(stage===0 && type==="grass"){
+
+addGrass();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===1 && type==="grasshopper"){
+
+addGrasshopper();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===2 && type==="frog"){
+
+addFrog();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===3 && type==="snake"){
+
+addSnake();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===4 && type==="hawk"){
+
+addHawk();
+
+win();
+
+showFinalImage();
+
+}
+
+else{
+
+wrong();
+
+}
+
+}
+
+/* صحيح */
+
+function correct(){
+
+document.getElementById("message").innerHTML=
+"✅ صحيح";
+
+document.getElementById("message").style.color=
+"green";
+
+}
+
+/* خطأ */
+
+function wrong(){
+
+document.getElementById("message").innerHTML=
+"❌ ترتيب خاطئ";
+
+document.getElementById("message").style.color=
+"red";
+
+}
+
+/* الفوز */
+
+function win(){
+
+document.getElementById("message").innerHTML=
+"🎉 أحسنت! أكملت السلسلة الغذائية";
+
+document.getElementById("message").style.color=
+"green";
+
+/* إظهار زر الرجوع */
+
+document.getElementById("back-btn").style.display=
+"inline-block";
+
+}
+
+/* الرجوع */
+
+function goBack(){
+
+window.location.href="index.html";
+
+}
+
+/* إضافة الكائنات */
+
+function addGrass(){
+
+const x=document.createElement("div");
+
+x.className="grass";
+
+land.appendChild(x);
+
+}
+
+function addGrasshopper(){
+
+const x=document.createElement("div");
+
+x.className="grasshopper";
+
+land.appendChild(x);
+
+}
+
+function addFrog(){
+
+const x=document.createElement("div");
+
+x.className="frog";
+
+land.appendChild(x);
+
+}
+
+function addSnake(){
+
+const x=document.createElement("div");
+
+x.className="snake";
+
+land.appendChild(x);
+
+}
+
+function addHawk(){
+
+const x=document.createElement("div");
+
+x.className="hawk";
+
+land.appendChild(x);
+
+}
+
+/* صورة النهاية */
+
+function showFinalImage(){
+
+document.getElementById("final-image").innerHTML=`
+
+<h2 style="color:#2e7d32;">
+السلسلة الغذائية الصحيحة
+</h2>
+
+<img src="foodchain.png">
+
+`;
+
+}
+
+</script>
+
+</body>
+
+</html>

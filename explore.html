@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>الاستكشاف البيئي</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(to bottom,#dfffe0,#f4fff4);
+text-align:center;
+}
+
+h1{
+color:#2e7d32;
+font-size:45px;
+margin-top:20px;
+}
+
+/* الأزرار */
+
+button{
+
+padding:15px 25px;
+margin:10px;
+
+border:none;
+
+border-radius:15px;
+
+background:#2e7d32;
+
+color:white;
+
+font-size:20px;
+
+cursor:pointer;
+
+transition:0.2s;
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+background:#1b5e20;
+
+}
+
+/* اللعبة */
+
+#game-area{
+
+width:736px;
+height:1024px;
+
+margin:20px auto;
+
+position:relative;
+
+border-radius:20px;
+
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+
+display:none;
+
+}
+
+/* صورة الغابة */
+
+#forest{
+
+width:100%;
+height:100%;
+
+}
+
+/* مناطق الضغط */
+
+.item{
+
+position:absolute;
+
+width:140px;
+
+height:140px;
+
+cursor:pointer;
+
+border-radius:50%;
+
+}
+
+/* الرسائل */
+
+#message{
+
+font-size:30px;
+font-weight:bold;
+margin-top:15px;
+
+}
+
+/* المؤقت */
+
+#timer{
+
+font-size:30px;
+font-weight:bold;
+color:#d84315;
+
+}
+
+/* الأزرار المخفية */
+
+#home-btn,
+#next-btn{
+
+display:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🔎 الاستكشاف البيئي</h1>
+
+<div id="type-screen">
+
+<button onclick="startPuzzle()">
+🧩 لغز
+</button>
+
+<button onclick="startChallenge()">
+⚡ تحدي
+</button>
+
+</div>
+
+<h2 id="task"></h2>
+
+<p id="timer"></p>
+
+<div id="game-area">
+
+<img src="forest.png" id="forest">
+
+<!-- الفطر -->
+
+<div class="item"
+
+style="
+top:398px;
+left:240px;
+"
+
+onclick="checkAnswer('mushroom',this)">
+</div>
+
+<!-- الأرنب -->
+
+<div class="item"
+
+style="
+top:380px;
+left:360px;
+"
+
+onclick="checkAnswer('rabbit',this)">
+</div>
+
+<!-- الفراشة -->
+
+<div class="item"
+
+style="
+top:180px;
+left:490px;
+"
+
+onclick="checkAnswer('butterfly',this)">
+</div>
+
+<!-- الثعلب -->
+
+<div class="item"
+
+style="
+top:480px;
+left:500px;
+"
+
+onclick="checkAnswer('fox',this)">
+</div>
+
+<!-- الطيور -->
+
+<div class="item"
+
+style="
+top:290px;
+left:600px;
+"
+
+onclick="checkAnswer('bird',this)">
+</div>
+
+<!-- سلحفاء -->
+
+<div class="item"
+
+style="
+top:650px;
+left:180px;
+"
+
+onclick="checkAnswer('turtle',this)">
+</div>
+
+<!-- قنفذ -->
+
+<div class="item"
+
+style="
+top:500px;
+left:130px;
+"
+
+onclick="checkAnswer('urchin',this)">
+</div>
+
+<!-- وردة حمراء -->
+
+<div class="item"
+
+style="
+top:590px;
+left:30px;
+"
+
+onclick="checkAnswer('Red rose',this)">
+</div>
+</div>
+
+<p id="message"></p>
+
+<br>
+
+<button id="next-btn"
+
+onclick="nextLevel()">
+
+➡️ التالي
+
+</button>
+
+<button id="home-btn"
+
+onclick="goHome()">
+
+🏠 الصفحة الرئيسية
+
+</button>
+
+<script>
+
+/* المتغيرات */
+
+let mode="";
+
+let currentLevel=0;
+
+let found=[];
+
+let timer=null;
+
+let timeLeft=30;
+
+/* الألغاز */
+
+const puzzles=[
+
+{
+task:"🧩 ابحث عن كائن يعد من المحللات و لونه احمر",
+answers:["mushroom"]
+},
+
+{
+task:"🧩 ابحث عن  حيوان يحب اكل الجزر",
+answers:["rabbit"]
+},
+
+{
+task:"🧩 ابحث عن حشرة",
+answers:["butterfly"]
+}
+
+];
+
+/* التحديات */
+
+const challenges=[
+
+{
+task:"⚡ ابحث عن السلحفاء والفراشة",
+answers:["turtle","butterfly"]
+},
+
+{
+task:"⚡ ابحث عن القنفذ والثعلب",
+answers:["urchin","fox"]
+},
+
+{
+task:"⚡ ابحث عن الوردة الحمراء و العصفور الازرق",
+answers:["Red rose","bird"]
+}
+
+];
+
+/* بدء اللغز */
+
+function startPuzzle(){
+
+document.getElementById("type-screen").style.display=
+"none";
+
+mode="puzzle";
+
+currentLevel=0;
+
+loadPuzzle();
+
+}
+
+/* تحميل اللغز */
+
+function loadPuzzle(){
+
+found=[];
+
+resetItems();
+
+clearInterval(timer);
+
+document.getElementById("game-area").style.display=
+"block";
+
+document.getElementById("task").innerHTML=
+puzzles[currentLevel].task;
+
+document.getElementById("message").innerHTML="";
+
+document.getElementById("timer").innerHTML="";
+
+document.getElementById("next-btn").style.display=
+"none";
+
+document.getElementById("home-btn").style.display=
+"none";
+
+}
+
+/* بدء التحدي */
+
+function startChallenge(){
+
+document.getElementById("type-screen").style.display=
+"none";
+
+mode="challenge";
+
+currentLevel=0;
+
+loadChallenge();
+
+}
+
+/* تحميل التحدي */
+
+function loadChallenge(){
+
+found=[];
+
+resetItems();
+
+timeLeft=30;
+
+clearInterval(timer);
+
+document.getElementById("game-area").style.display=
+"block";
+
+document.getElementById("task").innerHTML=
+challenges[currentLevel].task;
+
+document.getElementById("message").innerHTML="";
+
+document.getElementById("timer").innerHTML=
+"⏱ "+timeLeft;
+
+document.getElementById("next-btn").style.display=
+"none";
+
+document.getElementById("home-btn").style.display=
+"none";
+
+/* العد التنازلي */
+
+timer=setInterval(function(){
+
+timeLeft--;
+
+document.getElementById("timer").innerHTML=
+"⏱ "+timeLeft;
+
+if(timeLeft<=0){
+
+clearInterval(timer);
+
+lose();
+
+}
+
+},1000);
+
+}
+
+/* التحقق */
+
+function checkAnswer(type,element){
+
+let correctAnswers=[];
+
+if(mode==="puzzle"){
+
+correctAnswers=
+puzzles[currentLevel].answers;
+
+}
+
+if(mode==="challenge"){
+
+correctAnswers=
+challenges[currentLevel].answers;
+
+}
+
+/* صح */
+
+if(correctAnswers.includes(type)){
+
+if(!found.includes(type)){
+
+found.push(type);
+
+element.style.border=
+"8px solid lime";
+
+correct();
+
+}
+
+}
+
+/* خطأ */
+
+else{
+
+element.style.border=
+"8px solid red";
+
+wrong();
+
+}
+
+/* الفوز */
+
+if(found.length===correctAnswers.length){
+
+clearInterval(timer);
+
+win();
+
+}
+
+}
+
+/* رسالة صح */
+
+function correct(){
+
+document.getElementById("message").innerHTML=
+"✅ ممتاز";
+
+document.getElementById("message").style.color=
+"green";
+
+}
+
+/* رسالة خطأ */
+
+function wrong(){
+
+document.getElementById("message").innerHTML=
+"❌ حاول مرة أخرى";
+
+document.getElementById("message").style.color=
+"red";
+
+}
+
+/* الفوز */
+
+function win(){
+
+clearInterval(timer);
+
+document.getElementById("message").innerHTML=
+"🎉 أحسنت!";
+
+document.getElementById("message").style.color=
+"green";
+
+if(mode==="puzzle"){
+
+if(currentLevel<puzzles.length-1){
+
+document.getElementById("next-btn").style.display=
+"inline-block";
+
+}
+
+else{
+
+document.getElementById("home-btn").style.display=
+"inline-block";
+
+}
+
+}
+
+if(mode==="challenge"){
+
+if(currentLevel<challenges.length-1){
+
+document.getElementById("next-btn").style.display=
+"inline-block";
+
+}
+
+else{
+
+document.getElementById("home-btn").style.display=
+"inline-block";
+
+}
+
+}
+
+}
+
+/* التالي */
+
+function nextLevel(){
+
+currentLevel++;
+
+if(mode==="puzzle"){
+
+loadPuzzle();
+
+}
+
+if(mode==="challenge"){
+
+loadChallenge();
+
+}
+
+}
+
+/* خسارة */
+
+function lose(){
+
+document.getElementById("message").innerHTML=
+"⏰ انتهى الوقت";
+
+document.getElementById("message").style.color=
+"red";
+
+document.getElementById("home-btn").style.display=
+"inline-block";
+
+}
+
+/* إعادة المناطق */
+
+function resetItems(){
+
+let items=document.querySelectorAll(".item");
+
+items.forEach(item=>{
+
+item.style.border="none";
+
+});
+
+}
+
+/* الصفحة الرئيسية */
+
+function goHome(){
+
+clearInterval(timer);
+
+window.location.href="index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

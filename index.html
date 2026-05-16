@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>لعبة علم البيئة</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="quiz-container" id="quiz-box">
+
+<div id="intro-screen">
+
+<h1>🌱 لعبة علم البيئة 🌱</h1>
+
+<button onclick="startIntro()">ابدأ</button>
+
+</div>
+
+<div id="name-screen" style="display:none;">
+
+<input type="text" id="user-name" placeholder="اكتب اسمك">
+
+<button onclick="saveName()">استمرار</button>
+
+</div>
+
+<div id="type-screen" style="display:none;">
+
+<h2>اختر نوع الأسئلة</h2>
+
+<button onclick="chooseType('all')">الكل</button>
+
+<button onclick="chooseType('mcq')">اختياري</button>
+
+<br>
+
+<button onclick="chooseType('tf')">صح وخطأ</button>
+
+<button onclick="chooseType('fill')">إكمال</button>
+
+<hr>
+
+<h2 class="activity-title">الأنشطة التفاعلية</h2>
+
+<button onclick="location.href='succession.html'">
+🌳 التعاقب البيئي
+</button>
+<button onclick="location.href='foodchain.html'">
+🌿 السلسلة الغذائية
+</button>
+<button onclick="location.href='explore.html'">
+
+🔎 الاستكشاف البيئي
+
+</button>
+</div>
+
+<div id="setup-screen" style="display:none;">
+
+<h2 id="welcome-msg"></h2>
+
+<p>اختر المستوى</p>
+
+<button onclick="startTest('easy')">سهل</button>
+
+<button onclick="startTest('medium')">متوسط</button>
+
+<button onclick="startTest('hard')">صعب</button>
+
+</div>
+
+<div id="question-screen" style="display:none;">
+
+<p id="xp">⭐ النقاط: 0</p>
+
+<p id="timer">⏱ 30</p>
+
+<h2 id="question-text"></h2>
+
+<div id="answers"></div>
+
+<p id="feedback"></p>
+
+<button onclick="nextQuestion()">التالي</button>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

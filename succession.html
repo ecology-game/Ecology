@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>التعاقب البيئي</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(to bottom,#d7ffd9,#f2fff2);
+text-align:center;
+overflow-x:hidden;
+}
+
+h1{
+color:#2e7d32;
+margin-top:20px;
+font-size:45px;
+}
+
+.choice-box{
+margin-top:20px;
+}
+
+button{
+
+padding:15px 25px;
+margin:10px;
+
+border:none;
+
+border-radius:15px;
+
+background:#2e7d32;
+
+color:white;
+
+font-size:20px;
+
+cursor:pointer;
+
+transition:0.2s;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+background:#1b5e20;
+
+}
+
+#instruction{
+
+font-size:25px;
+
+font-weight:bold;
+
+color:#2e7d32;
+
+}
+
+#land{
+
+width:90%;
+
+max-width:950px;
+
+height:500px;
+
+margin:30px auto;
+
+background:linear-gradient(to top,#8d6e63,#c8b38b);
+
+border-radius:25px;
+
+border:6px solid #5d4037;
+
+position:relative;
+
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+
+}
+
+#game-buttons{
+display:none;
+}
+
+#message{
+
+font-size:30px;
+
+font-weight:bold;
+
+margin-top:15px;
+
+}
+
+/* العناصر */
+
+.rock,
+.lichen,
+.grass,
+.bush,
+.tree{
+
+position:absolute;
+
+background-size:contain;
+
+background-repeat:no-repeat;
+
+background-position:center;
+
+bottom:10px;
+
+}
+
+/* الصور */
+
+.rock{
+
+width:90px;
+
+height:90px;
+
+background-image:url('rock.png');
+
+}
+
+.lichen{
+
+width:55px;
+
+height:55px;
+
+background-image:url('lichen.png');
+
+}
+
+.grass{
+
+width:70px;
+
+height:90px;
+
+background-image:url('grass.png');
+
+}
+
+.bush{
+
+width:100px;
+
+height:100px;
+
+background-image:url('bush.png');
+
+}
+
+.tree{
+
+width:140px;
+
+height:170px;
+
+background-image:url('tree.png');
+
+}
+
+/* صورة المراحل */
+
+#stages-container img{
+
+width:90%;
+
+max-width:900px;
+
+margin-top:20px;
+
+border-radius:20px;
+
+box-shadow:0 10px 20px rgba(0,0,0,0.3);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🌳 التعاقب البيئي</h1>
+
+<div class="choice-box">
+
+<h2>اختر نوع التعاقب</h2>
+
+<button onclick="startGame('primary')">
+
+التعاقب الأولي
+
+</button>
+
+<button onclick="startGame('secondary')">
+
+التعاقب الثانوي
+
+</button>
+
+</div>
+
+<p id="instruction"></p>
+
+<div id="land"></div>
+
+<div id="game-buttons">
+
+<button onclick="chooseStage('bush')">
+🌳 شجيرات
+</button>
+
+<button onclick="chooseStage('lichen')">
+🟢 أشنات
+</button>
+
+<button onclick="chooseStage('grass')">
+🌿 أعشاب
+</button>
+
+<button onclick="chooseStage('rock')">
+🪨 صخور جرداء
+</button>
+
+
+<button onclick="chooseStage('tree')">
+🌲 أشجار
+</button>
+
+</div>
+
+<p id="message"></p>
+
+<div id="stages-container"></div>
+
+<script>
+
+const land=document.getElementById("land");
+
+let gameType="";
+
+let stage=0;
+
+/* بدء اللعبة */
+
+function startGame(type){
+
+gameType=type;
+
+stage=0;
+
+land.innerHTML="";
+
+document.getElementById("stages-container").innerHTML="";
+
+document.getElementById("game-buttons").style.display="block";
+
+document.getElementById("message").innerHTML="";
+
+if(type==="primary"){
+
+document.getElementById("instruction").innerHTML=
+"رتب مراحل التعاقب الأولي بالترتيب الصحيح";
+
+}
+
+if(type==="secondary"){
+
+document.getElementById("instruction").innerHTML=
+"رتب مراحل التعاقب الثانوي بالترتيب الصحيح";
+
+}
+
+}
+
+/* مكان عشوائي */
+
+function randomX(){
+
+return Math.floor(Math.random()*820);
+
+}
+
+/* اختيار المراحل */
+
+function chooseStage(type){
+
+/* التعاقب الأولي */
+
+if(gameType==="primary"){
+
+if(stage===0 && type==="rock"){
+
+addRock();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===1 && type==="lichen"){
+
+addLichen();
+
+correct();
+
+stage++;
+
+}
+else if(stage===2 && type==="grass"){
+
+addGrass();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===3 && type==="bush"){
+
+addBush();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===4 && type==="tree"){
+
+addTree();
+
+win();
+
+showPrimaryStages();
+
+}
+
+else{
+
+wrong();
+
+}
+
+}
+
+/* التعاقب الثانوي */
+
+if(gameType==="secondary"){
+
+if(stage===0 && type==="grass"){
+
+addGrass();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===1 && type==="bush"){
+
+addBush();
+
+correct();
+
+stage++;
+
+}
+
+else if(stage===2 && type==="tree"){
+
+addTree();
+
+win();
+
+showSecondaryStages();
+
+}
+
+else{
+
+wrong();
+
+}
+
+}
+
+}
+
+/* صحيح */
+
+function correct(){
+
+document.getElementById("message").innerHTML="✅ صحيح";
+
+document.getElementById("message").style.color="green";
+
+}
+
+/* خطأ */
+
+function wrong(){
+
+document.getElementById("message").innerHTML="❌ ترتيب خاطئ";
+
+document.getElementById("message").style.color="red";
+
+}
+
+/* فوز */
+function win(){
+
+document.getElementById("message").innerHTML=
+"🎉 أحسنت! أكملت ترتيب التعاقب";
+
+document.getElementById("message").style.color="green";
+
+document.getElementById("back-btn").style.display=
+"inline-block";
+
+}
+/* صورة مراحل التعاقب الأولي */
+
+function showPrimaryStages(){
+
+document.getElementById("stages-container").innerHTML=`
+
+<h2 style="color:#2e7d32;">
+مراحل التعاقب الأولي
+</h2>
+
+<img src="stages.png">
+
+`;
+
+}
+
+/* صورة مراحل التعاقب الثانوي */
+
+function showSecondaryStages(){
+
+document.getElementById("stages-container").innerHTML=`
+
+<h2 style="color:#2e7d32;">
+مراحل التعاقب الثانوي
+</h2>
+
+<img src="secondary.png">
+
+`;
+
+}
+
+/* الصخور */
+
+function addRock(){
+
+for(let i=0;i<5;i++){
+
+const rock=document.createElement("div");
+
+rock.className="rock";
+
+rock.style.left=randomX()+"px";
+
+land.appendChild(rock);
+
+}
+
+}
+
+/* الأشنات */
+
+function addLichen(){
+
+for(let i=0;i<10;i++){
+
+const lichen=document.createElement("div");
+
+lichen.className="lichen";
+
+lichen.style.left=randomX()+"px";
+
+land.appendChild(lichen);
+
+}
+
+}
+
+/* الأعشاب */
+
+function addGrass(){
+
+for(let i=0;i<10;i++){
+
+const grass=document.createElement("div");
+
+grass.className="grass";
+
+grass.style.left=randomX()+"px";
+
+land.appendChild(grass);
+
+}
+
+}
+
+/* الشجيرات */
+
+function addBush(){
+
+for(let i=0;i<6;i++){
+
+const bush=document.createElement("div");
+
+bush.className="bush";
+
+bush.style.left=randomX()+"px";
+
+land.appendChild(bush);
+
+}
+
+}
+
+/* الأشجار */
+
+function addTree(){
+
+for(let i=0;i<4;i++){
+
+const tree=document.createElement("div");
+
+tree.className="tree";
+
+tree.style.left=randomX()+"px";
+
+land.appendChild(tree);
+
+}
+
+}
+
+function goBack(){
+
+window.location.href="index.html";
+
+}
+</script>
+<br><br>
+
+<button id="back-btn"
+onclick="goBack()"
+style="display:none;">
+
+⬅️ الرجوع للرئيسية
+
+</button>
+</body>
+
+</html>
