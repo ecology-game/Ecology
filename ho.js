@@ -4,7 +4,6 @@ const resultImage = document.getElementById("resultImage");
 const plantName = document.getElementById("plantName");
 const plantDescription = document.getElementById("plantDescription");
 const uploadImage = document.getElementById("uploadImage");
-
 // START CAMERA
 async function startCamera(){
 
