@@ -51,10 +51,7 @@ const plants = [
     name:"🍋 Lemon Plant",
     info:"Lemon plants grow citrus fruits rich in vitamin C."
   }
-{
-    name:"🌷 Tulip",
-    info:"Tulips are colorful spring flowers known for their soft petals and elegant shape."
-  },
+
 ];
 
 // CAPTURE PHOTO
