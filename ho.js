@@ -26,34 +26,6 @@ async function startCamera(){
 
 startCamera();
 
-// عداد الترتيب
-let currentPlantIndex = 0;
-
-// النباتات بالترتيب المطلوب
-const plants = [
-
-  {
-    name:"🌿 Aloe Vera",
-    info:"Aloe Vera is a medicinal plant used for skin care and healing burns."
-  },
-
-  {
-    name:"🪴 Snake Plant",
-    info:"Snake plants help purify indoor air and are easy to care for."
-  },
-
-  {
-    name:"🌸 Lavender",
-    info:"Lavender is famous for its calming scent and beautiful purple flowers."
-  },
-
-  {
-    name:"🍋 Lemon Plant",
-    info:"Lemon plants grow citrus fruits rich in vitamin C."
-  }
-
-];
-
 // CAPTURE PHOTO
 function capturePhoto(){
 
@@ -96,25 +68,36 @@ function fakeAIAnalysis(){
 
   plantName.innerText = "🤖 AI Scanning...";
 
-  plantDescription.innerText =
-  "Analyzing plant image using artificial intelligence...";
+  plantDescription.innerText = "Analyzing plant image using artificial intelligence...";
 
   setTimeout(()=>{
 
-    // يجيب النبات حسب الترتيب
-    const currentPlant = plants[currentPlantIndex];
+    const plants = [
+      {
+        name:"🌿 Aloe Vera",
+        info:"Aloe Vera is a medicinal plant used for skin care and healing burns."
+      },
 
-    plantName.innerText = currentPlant.name;
-    plantDescription.innerText = currentPlant.info;
+      {
+        name:"🌸 Lavender",
+        info:"Lavender is famous for its calming scent and beautiful purple flowers."
+      },
 
-    // ينتقل للنبات اللي بعده
-    currentPlantIndex++;
+      {
+        name:"🪴 Snake Plant",
+        info:"Snake plants help purify indoor air and are easy to care for."
+      },
 
-    // يرجع للبداية بعد آخر نبات
-    if(currentPlantIndex >= plants.length){
+      {
+        name:"🍋 Lemon Plant",
+        info:"Lemon plants grow citrus fruits rich in vitamin C."
+      }
+    ];
 
-      currentPlantIndex = 0;
-    }
+    const randomPlant = plants[Math.floor(Math.random()*plants.length)];
+
+    plantName.innerText = randomPlant.name;
+    plantDescription.innerText = randomPlant.info;
 
   },2500);
 }
