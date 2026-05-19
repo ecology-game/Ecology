@@ -4,6 +4,7 @@ const resultImage = document.getElementById("resultImage");
 const plantName = document.getElementById("plantName");
 const plantDescription = document.getElementById("plantDescription");
 const uploadImage = document.getElementById("uploadImage");
+
 // START CAMERA
 async function startCamera(){
 
@@ -24,6 +25,34 @@ async function startCamera(){
 }
 
 startCamera();
+
+// عداد الترتيب
+let currentPlantIndex = 0;
+
+// النباتات بالترتيب المطلوب
+const plants = [
+
+  {
+    name:"🌿 Aloe Vera",
+    info:"Aloe Vera is a medicinal plant used for skin care and healing burns."
+  },
+
+  {
+    name:"🪴 Snake Plant",
+    info:"Snake plants help purify indoor air and are easy to care for."
+  },
+
+  {
+    name:"🌸 Lavender",
+    info:"Lavender is famous for its calming scent and beautiful purple flowers."
+  },
+
+  {
+    name:"🍋 Lemon Plant",
+    info:"Lemon plants grow citrus fruits rich in vitamin C."
+  }
+
+];
 
 // CAPTURE PHOTO
 function capturePhoto(){
@@ -67,36 +96,25 @@ function fakeAIAnalysis(){
 
   plantName.innerText = "🤖 AI Scanning...";
 
-  plantDescription.innerText = "Analyzing plant image using artificial intelligence...";
+  plantDescription.innerText =
+  "Analyzing plant image using artificial intelligence...";
 
   setTimeout(()=>{
 
-    const plants = [
-      {
-        name:"🌿 Aloe Vera",
-        info:"Aloe Vera is a medicinal plant used for skin care and healing burns."
-      },
+    // يجيب النبات حسب الترتيب
+    const currentPlant = plants[currentPlantIndex];
 
-      {
-        name:"🌸 Lavender",
-        info:"Lavender is famous for its calming scent and beautiful purple flowers."
-      },
+    plantName.innerText = currentPlant.name;
+    plantDescription.innerText = currentPlant.info;
 
-      {
-        name:"🪴 Snake Plant",
-        info:"Snake plants help purify indoor air and are easy to care for."
-      },
+    // ينتقل للنبات اللي بعده
+    currentPlantIndex++;
 
-      {
-        name:"🍋 Lemon Plant",
-        info:"Lemon plants grow citrus fruits rich in vitamin C."
-      }
-    ];
+    // يرجع للبداية بعد آخر نبات
+    if(currentPlantIndex >= plants.length){
 
-    const randomPlant = plants[Math.floor(Math.random()*plants.length)];
-
-    plantName.innerText = randomPlant.name;
-    plantDescription.innerText = randomPlant.info;
+      currentPlantIndex = 0;
+    }
 
   },2500);
 }
